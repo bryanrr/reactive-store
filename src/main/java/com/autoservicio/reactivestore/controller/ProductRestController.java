@@ -1,11 +1,9 @@
 package com.autoservicio.reactivestore.controller;
 
-import java.io.IOException;
 import java.time.Duration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.autoservicio.reactivestore.dto.Product;
 import com.autoservicio.reactivestore.service.ProductService;
-import com.autoservicio.reactivestore.service.impl.ProductServiceImpl;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -31,5 +28,10 @@ public class ProductRestController {
 	@RequestMapping(value="/product/{id}", method=RequestMethod.GET)
 	Mono<Product> getProductById(@PathVariable("id")String id){
 		return productService.getProductById(id);
+	}
+	
+	@RequestMapping(value="/products/{coincidences}", method=RequestMethod.GET)
+	Flux<Product> getProductsByCoincidences(@PathVariable("coincidences")String coincidences){
+		return productService.getProductCoincidences(coincidences);
 	}
 }

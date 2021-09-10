@@ -24,5 +24,17 @@ public class ProductServiceImpl implements ProductService {
 	public Mono<Product>getProductById(String id){
 		return productRepository.findById(id);
 	}
+	
+	@Override
+	public Flux<Product>getProductCoincidences(String coincidences){
+		String[]words=coincidences.split(" ");
+		String regexp="[\\w]*";
+		
+		for(String word:words) {
+			regexp+=word+"[\\w\\s]*";
+		}
+		
+		return productRepository.findCoincidences(regexp);
+	}
 
 }
