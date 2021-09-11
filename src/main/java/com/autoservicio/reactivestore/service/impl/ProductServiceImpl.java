@@ -1,8 +1,8 @@
 package com.autoservicio.reactivestore.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.autoservicio.reactivestore.dto.Product;
@@ -39,6 +39,13 @@ public class ProductServiceImpl implements ProductService {
 		Sort sort=Sort.by(Sort.Direction.ASC, "description");
 		
 		return productRepository.findCoincidences(regexp,sort);
+	}
+	
+	@Override
+	public Flux<Product>getAllProductsPage(int page,int records){
+		Sort sort=Sort.by(Sort.Direction.ASC, "description");
+		
+		return productRepository.findAllPage(PageRequest.of(page, records, sort));
 	}
 
 }
