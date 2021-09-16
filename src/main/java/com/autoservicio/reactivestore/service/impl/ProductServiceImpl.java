@@ -3,6 +3,10 @@ package com.autoservicio.reactivestore.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 import com.autoservicio.reactivestore.dto.Product;
@@ -16,6 +20,8 @@ import reactor.core.publisher.Mono;
 public class ProductServiceImpl implements ProductService {
 	@Autowired
 	ProductRepository productRepository;
+	@Autowired
+	ReactiveMongoTemplate reactiveMongoTemplate;
 	
 	@Override
 	public Flux<Product>getAllProducts(){
@@ -47,5 +53,19 @@ public class ProductServiceImpl implements ProductService {
 		
 		return productRepository.findAllPage(PageRequest.of(page, records, sort));
 	}
+	
+	@Override
+	public Mono<Product> updateProductPrices(Product product){
+		Query query=new Query();
+		query.addCriteria(Criteria.where("_id").is(product.getId()));
+		
+		Update update=new Update();
+		update.set("sellingPrice", product.getSellingPrice());
+		update.set("purchasePrice", product.getPurchasePrice());
+		
+		return reactiveMongoTemplate.findAndModify(query, update, Product.class);
+		
+	}
 
 }
+

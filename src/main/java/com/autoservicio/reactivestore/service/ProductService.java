@@ -10,4 +10,5 @@ public interface ProductService {
 	Mono<Product>getProductById(String id);
 	Flux<Product>getProductCoincidences(String coincidences);
 	Flux<Product>getAllProductsPage(int page,int records);
+	Mono<Product> updateProductPrices(Product product);
 }
