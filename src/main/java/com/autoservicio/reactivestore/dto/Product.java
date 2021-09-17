@@ -1,6 +1,7 @@
 package com.autoservicio.reactivestore.dto;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -17,6 +18,7 @@ public class Product {
 	private Number stock;
 	private Boolean fractional;
 	private Boolean promotion;
+	private Date lastUpdatedTime;
 	private Distributor distributor;
 	
 	public String getId() {
@@ -60,6 +62,12 @@ public class Product {
 	}
 	public void setPromotion(Boolean promotion) {
 		this.promotion = promotion;
+	}
+	public Date getLastUpdatedTime() {
+		return lastUpdatedTime;
+	}
+	public void setLastUpdatedTime(Date lastUpdatedTime) {
+		this.lastUpdatedTime = lastUpdatedTime;
 	}
 	public Distributor getDistributor() {
 		return distributor;
