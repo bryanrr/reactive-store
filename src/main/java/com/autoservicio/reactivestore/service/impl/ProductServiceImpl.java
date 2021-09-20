@@ -1,5 +1,7 @@
 package com.autoservicio.reactivestore.service.impl;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -62,6 +64,7 @@ public class ProductServiceImpl implements ProductService {
 		Update update=new Update();
 		update.set("sellingPrice", product.getSellingPrice());
 		update.set("purchasePrice", product.getPurchasePrice());
+		update.set("lastUpdatedTime", new Date());
 		
 		return reactiveMongoTemplate.findAndModify(query, update, Product.class);
 		
