@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories;
 
 import com.autoservicio.reactivestore.converter.BsonTimestampConverter;
+import com.autoservicio.reactivestore.converter.ObjectIdConverter;
 import com.autoservicio.reactivestore.repositories.ProductRepository;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
@@ -41,6 +42,7 @@ public class MongoConfig extends AbstractReactiveMongoConfiguration{
 	 @Override
 	 public MongoCustomConversions customConversions() {
 	        converters.add(new BsonTimestampConverter());
+	        converters.add(new ObjectIdConverter());
 	        return new MongoCustomConversions(converters);
 	 }
 }
