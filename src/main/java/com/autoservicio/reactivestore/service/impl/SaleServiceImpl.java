@@ -17,6 +17,7 @@ import com.autoservicio.reactivestore.repositories.SaleRepository;
 import com.autoservicio.reactivestore.service.SaleService;
 
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Service
 public class SaleServiceImpl implements SaleService {
@@ -43,6 +44,11 @@ public class SaleServiceImpl implements SaleService {
 		Aggregation aggregation = Aggregation.newAggregation(matchStage, projectStage);
 		
 		return reactiveMongoTemplate.aggregate(aggregation, "sale", Purchase.class);
+	}
+	
+	@Override
+	public Mono<Purchase>findSaleById(String id){
+		return saleRepository.findById(Mono.just(id));
 	}
 	
 }
