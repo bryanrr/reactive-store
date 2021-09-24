@@ -8,4 +8,5 @@ import reactor.core.publisher.Mono;
 public interface SaleService {
 	Flux<Purchase>getPurchasesInPeriod(String fechaInicio,String fechaFin);
 	Mono<Purchase>findSaleById(String id);
+	Flux<Purchase>findProductPurchasedInPeriod(String barcode,String startDate,String endDate);
 }

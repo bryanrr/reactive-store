@@ -1,6 +1,7 @@
 package com.autoservicio.reactivestore.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,6 +28,11 @@ public class SaleRestController {
 	@RequestMapping(value="/purchase", method=RequestMethod.POST)
 	public Mono<Purchase>getPurchaseById(@RequestBody PurchaseDetails purchaseDetails){
 		return saleService.findSaleById(purchaseDetails.getPurchaseId());
+	}
+	
+	@RequestMapping(value="/purchases/{barcode}", method=RequestMethod.POST)
+	public Flux<Purchase>getPurchasedProductInPeriod(@PathVariable("barcode")String barcode,@RequestBody PurchasesRequest purchasesRequest){
+		return saleService.findProductPurchasedInPeriod(barcode, purchasesRequest.getFechaInicio(), purchasesRequest.getFechaFin());
 	}
 	
 }

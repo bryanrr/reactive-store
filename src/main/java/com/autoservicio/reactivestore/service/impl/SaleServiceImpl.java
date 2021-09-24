@@ -4,6 +4,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
@@ -21,6 +23,8 @@ import reactor.core.publisher.Mono;
 
 @Service
 public class SaleServiceImpl implements SaleService {
+	Logger logger=LoggerFactory.getLogger(SaleServiceImpl.class);;
+	
 	@Autowired
 	SaleRepository saleRepository;
 	@Autowired
@@ -28,17 +32,7 @@ public class SaleServiceImpl implements SaleService {
 	
 	@Override
 	public Flux<Purchase>getPurchasesInPeriod(String fechaInicio,String fechaFin){
-		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-		Date dateInicio=null;
-		Date dateFin=null;
-		try {
-			dateInicio = sdf.parse(fechaInicio+" 00:00:00");
-			dateFin=sdf.parse(fechaFin+" 23:59:59");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		
-		MatchOperation matchStage = Aggregation.match(Criteria.where("purchaseDate").gte(dateInicio).lte(dateFin));
+		MatchOperation matchStage = Aggregation.match(getCriteriaInPeriod("purchaseDate",fechaInicio,fechaFin));
 		ProjectionOperation projectStage = Aggregation.project().andExclude("items","_class");
 		
 		Aggregation aggregation = Aggregation.newAggregation(matchStage, projectStage);
@@ -49,6 +43,31 @@ public class SaleServiceImpl implements SaleService {
 	@Override
 	public Mono<Purchase>findSaleById(String id){
 		return saleRepository.findById(Mono.just(id));
+	}
+	
+	@Override
+	public Flux<Purchase>findProductPurchasedInPeriod(String barcode,String startDate,String endDate){
+		return saleRepository.findPurchasedProductInPeriod(getDateFromString(startDate+" 00:00:00"), getDateFromString(endDate+" 23:59:59"), barcode);
+	}
+	
+	private Date getDateFromString(String dateString) {
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		Date date=null;
+		
+		try {
+			date = sdf.parse(dateString);
+		} catch (ParseException e) {
+			logger.error("Error parsing Date from String", e);
+		}
+		
+		return date;
+	}
+	
+	private Criteria getCriteriaInPeriod(String dbField,String startDate,String endDate) {
+		Date dateInicio=getDateFromString(startDate+" 00:00:00");
+		Date dateFin=getDateFromString(endDate+" 23:59:59");
+		
+		return Criteria.where(dbField).gte(dateInicio).lte(dateFin);
 	}
 	
 }
