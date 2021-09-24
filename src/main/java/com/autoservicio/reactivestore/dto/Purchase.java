@@ -9,7 +9,10 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 
 import com.autoservicio.reactivestore.models.PurchasedProduct;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+@JsonInclude(Include.NON_NULL)
 @Document(collection="sale")
 public class Purchase {
 	@Id
