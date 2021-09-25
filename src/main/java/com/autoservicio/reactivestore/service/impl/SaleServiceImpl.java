@@ -2,8 +2,11 @@ package com.autoservicio.reactivestore.service.impl;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.Date;
 
+import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +52,19 @@ public class SaleServiceImpl implements SaleService {
 	public Flux<Purchase>findProductPurchasedInPeriod(String barcode,String startDate,String endDate){
 		return saleRepository.findPurchasedProductInPeriod(getDateFromString(startDate+" 00:00:00"), getDateFromString(endDate+" 23:59:59"), barcode);
 	}
+	
+	@Override
+	public Flux<Document>findTotalSalePerDayInIsoWeek(String date){
+		LocalDate startDate=LocalDate.parse(date);
+		int isoDay=DayOfWeek.from(startDate).getValue();
+		startDate=startDate.minusDays(isoDay-1);
+		
+		LocalDate endDate=startDate.plusDays(7);
+		
+		return saleRepository.findTotalSalePerDayInPeriod(startDate, endDate);
+	}
+	
+	
 	
 	private Date getDateFromString(String dateString) {
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
