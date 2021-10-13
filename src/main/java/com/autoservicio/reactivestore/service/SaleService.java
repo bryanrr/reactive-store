@@ -12,4 +12,5 @@ public interface SaleService {
 	Mono<Purchase>findSaleById(String id);
 	Flux<Purchase>findProductPurchasedInPeriod(String barcode,String startDate,String endDate);
 	Flux<Document>findTotalSalePerDayInIsoWeek(String date);
+	Mono<Purchase>insertPurchase(Purchase purchase); 
 }

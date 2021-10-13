@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.FieldType;
 import com.autoservicio.reactivestore.models.Distributor;
 
 @Document(collection="product")
-public class Product {
+public class Product implements Comparable<Product>{
 	@Id
 	private String id;
 	private String description;
@@ -20,13 +20,17 @@ public class Product {
 	@Field(targetType = FieldType.DOUBLE)
 	private BigDecimal sellingPrice;
 	@Field(targetType = FieldType.DOUBLE)
-	private Number stock;
+	private Double stock;
 	@Field(targetType = FieldType.BOOLEAN)
 	private Boolean fractional;
 	@Field(targetType = FieldType.BOOLEAN)
 	private Boolean promotion;
 	private Date lastUpdatedTime;
 	private Distributor distributor;
+	
+	public void decreaseStock(Double decrease) {
+		this.stock-= decrease;
+	}
 	
 	public String getId() {
 		return id;
@@ -52,10 +56,10 @@ public class Product {
 	public void setSellingPrice(BigDecimal sellingPrice) {
 		this.sellingPrice = sellingPrice;
 	}
-	public Number getStock() {
+	public Double getStock() {
 		return stock;
 	}
-	public void setStock(Number stock) {
+	public void setStock(Double stock) {
 		this.stock = stock;
 	}
 	public Boolean getFractional() {
@@ -86,5 +90,9 @@ public class Product {
 	public String toString() {
 		return "Product [id=" + id + ", description=" + description + ", purchasePrice=" + purchasePrice
 				+ ", sellingPrice=" + sellingPrice + "]";
+	}
+	@Override
+	public int compareTo(Product p) {
+		return id.compareToIgnoreCase(p.getId());
 	}
 }

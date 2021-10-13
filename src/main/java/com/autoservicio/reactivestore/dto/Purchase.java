@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 
 import com.autoservicio.reactivestore.models.PurchasedProduct;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -21,6 +22,7 @@ public class Purchase {
 	private Double totalPurchasePrice;
 	@Field(targetType = FieldType.DOUBLE)
 	private Double totalSellingPrice;
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date purchaseDate;
 	private String client;
 	@Field(targetType = FieldType.DOUBLE)

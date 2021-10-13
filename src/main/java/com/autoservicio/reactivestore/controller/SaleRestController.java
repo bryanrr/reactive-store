@@ -41,4 +41,9 @@ public class SaleRestController {
 		return saleService.findTotalSalePerDayInIsoWeek(date);
 	}
 	
+	@RequestMapping(value="/purchases/add", method=RequestMethod.POST)
+	public Mono<Purchase>addPurchase(@RequestBody Purchase purchase){
+		return saleService.insertPurchase(purchase);
+	}
+	
 }

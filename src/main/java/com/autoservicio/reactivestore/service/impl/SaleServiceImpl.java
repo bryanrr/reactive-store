@@ -18,6 +18,8 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
 import com.autoservicio.reactivestore.dto.Purchase;
+import com.autoservicio.reactivestore.models.PurchasedProduct;
+import com.autoservicio.reactivestore.repositories.ProductRepository;
 import com.autoservicio.reactivestore.repositories.SaleRepository;
 import com.autoservicio.reactivestore.service.SaleService;
 
@@ -28,6 +30,8 @@ import reactor.core.publisher.Mono;
 public class SaleServiceImpl implements SaleService {
 	Logger logger=LoggerFactory.getLogger(SaleServiceImpl.class);;
 	
+	@Autowired
+	ProductRepository productRepository;
 	@Autowired
 	SaleRepository saleRepository;
 	@Autowired
@@ -64,7 +68,20 @@ public class SaleServiceImpl implements SaleService {
 		return saleRepository.findTotalSalePerDayInPeriod(startDate, endDate);
 	}
 	
-	
+	@Override
+	public Mono<Purchase>insertPurchase(Purchase purchase) {
+		Flux<PurchasedProduct>purchasedProducts=Flux.fromIterable(purchase.getItems());
+		
+		productRepository.findAllById(purchasedProducts.map(product->product.getBarcode())).map(p->{
+			Double quantity=purchasedProducts.toStream().filter(pp->pp.getBarcode().equalsIgnoreCase(p.getId())).map(pp->pp.getQuantity()).reduce(0.0, (a,b)->a+b);
+			p.decreaseStock(quantity);
+			return p;
+		}).flatMap(productRepository::save).subscribe();
+		
+		Mono<Purchase>returningPurchase=saleRepository.insert(purchase);
+		
+		return returningPurchase;
+	}
 	
 	private Date getDateFromString(String dateString) {
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
