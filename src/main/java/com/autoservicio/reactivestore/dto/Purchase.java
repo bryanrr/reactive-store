@@ -13,6 +13,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import lombok.Data;
+
+@Data
 @JsonInclude(Include.NON_NULL)
 @Document(collection="sale")
 public class Purchase {
@@ -29,46 +32,4 @@ public class Purchase {
 	private Double cardPaymentTax;
 	private List<PurchasedProduct> items;
 
-	public String get_id() {
-		return _id;
-	}
-	public void set_id(String _id) {
-		this._id = _id;
-	}
-	public Double getTotalPurchasePrice() {
-		return totalPurchasePrice;
-	}
-	public void setTotalPurchasePrice(Double totalPurchasePrice) {
-		this.totalPurchasePrice = totalPurchasePrice;
-	}
-	public Double getTotalSellingPrice() {
-		return totalSellingPrice;
-	}
-	public void setTotalSellingPrice(Double totalSellingPrice) {
-		this.totalSellingPrice = totalSellingPrice;
-	}
-	public Date getPurchaseDate() {
-		return purchaseDate;
-	}
-	public void setPurchaseDate(Date purchaseDate) {
-		this.purchaseDate = purchaseDate;
-	}
-	public String getClient() {
-		return client;
-	}
-	public void setClient(String client) {
-		this.client = client;
-	}
-	public Double getCardPaymentTax() {
-		return cardPaymentTax;
-	}
-	public void setCardPaymentTax(Double cardPaymentTax) {
-		this.cardPaymentTax = cardPaymentTax;
-	}
-	public List<PurchasedProduct> getItems() {
-		return items;
-	}
-	public void setItems(List<PurchasedProduct> items) {
-		this.items = items;
-	}
 }

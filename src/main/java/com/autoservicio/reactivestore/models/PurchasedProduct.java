@@ -6,6 +6,9 @@ import org.springframework.data.mongodb.core.mapping.FieldType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import lombok.Data;
+
+@Data
 @JsonInclude(Include.NON_NULL)
 public class PurchasedProduct {
 	private String barcode;
@@ -17,34 +20,4 @@ public class PurchasedProduct {
 	@Field(targetType = FieldType.DOUBLE)
 	private Double sellingPrice;
 	
-	public String getBarcode() {
-		return barcode;
-	}
-	public void setBarcode(String barcode) {
-		this.barcode = barcode;
-	}
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	public Double getQuantity() {
-		return quantity;
-	}
-	public void setQuantity(Double quantity) {
-		this.quantity = quantity;
-	}
-	public Double getPurchasePrice() {
-		return purchasePrice;
-	}
-	public void setPurchasePrice(Double purchasePrice) {
-		this.purchasePrice = purchasePrice;
-	}
-	public Double getSellingPrice() {
-		return sellingPrice;
-	}
-	public void setSellingPrice(Double sellingPrice) {
-		this.sellingPrice = sellingPrice;
-	}
 }
